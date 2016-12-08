@@ -15,7 +15,7 @@
 
 namespace refill {
 
-class ExtendedKalmanFilter : public FilterBase {
+class ExtendedKalmanFilter : public FilterBase<Eigen::VectorXd> {
  public:
   ExtendedKalmanFilter();
   // Initializes the Kalman filter in a way that expects system models to be

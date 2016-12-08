@@ -6,7 +6,7 @@ namespace refill {
 
 LinearizedMeasurementModel::LinearizedMeasurementModel(
     const size_t& state_dim, const size_t& measurement_dim,
-    const DistributionInterface& measurement_noise)
+    const DistributionInterface<Eigen::VectorXd>& measurement_noise)
     : MeasurementModelBase(state_dim, measurement_dim, measurement_noise) {}
 
 }  // namespace refill

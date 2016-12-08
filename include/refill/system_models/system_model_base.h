@@ -13,34 +13,37 @@ using std::size_t;
 
 namespace refill {
 
+template<typename StateType>
 class SystemModelBase {
  public:
-  virtual Eigen::VectorXd propagate(const Eigen::VectorXd& state,
-                                    const Eigen::VectorXd& input) const = 0;
+  virtual StateType propagate(const StateType& state,
+                              const StateType& input) const = 0;
 
   size_t getStateDim() const;
   size_t getInputDim() const;
   size_t getSystemNoiseDim() const;
-  DistributionInterface* getSystemNoise() const;
+  DistributionInterface<StateType>* getSystemNoise() const;
 
  protected:
   SystemModelBase() = delete;
   SystemModelBase(const size_t& state_dim,
-                  const DistributionInterface& system_noise);
+                  const DistributionInterface<StateType>& system_noise);
   SystemModelBase(const size_t& state_dim,
-                  const DistributionInterface& system_noise,
+                  const DistributionInterface<StateType>& system_noise,
                   const size_t& input_dim);
 
-  void setSystemModelBaseParameters(const size_t& state_dim,
-                           const DistributionInterface& system_noise);
-  void setSystemModelBaseParameters(const size_t& state_dim,
-                           const DistributionInterface& system_noise,
-                           const size_t& input_dim);
+  void setSystemModelBaseParameters(
+      const size_t& state_dim,
+      const DistributionInterface<StateType>& system_noise);
+  void setSystemModelBaseParameters(
+      const size_t& state_dim,
+      const DistributionInterface<StateType>& system_noise,
+      const size_t& input_dim);
 
  private:
   size_t state_dim_;
   size_t input_dim_;
-  std::unique_ptr<DistributionInterface> system_noise_;
+  std::unique_ptr<DistributionInterface<StateType>> system_noise_;
 };
 
 }  // namespace refill

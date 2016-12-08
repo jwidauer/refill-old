@@ -3,37 +3,43 @@
 using std::size_t;
 
 namespace refill {
-
-MeasurementModelBase::MeasurementModelBase(
+template<typename MeasurementType>
+MeasurementModelBase<MeasurementType>::MeasurementModelBase(
     const size_t& state_dim, const size_t& measurement_dim,
-    const DistributionInterface& measurement_noise)
+    const DistributionInterface<MeasurementType>& measurement_noise)
     : state_dim_(state_dim),
       measurement_dim_(measurement_dim),
       measurement_noise_(measurement_noise.clone()) {
 }
 
-void MeasurementModelBase::setMeasurementModelBaseParameters(
+template<typename MeasurementType>
+void MeasurementModelBase<MeasurementType>::setMeasurementModelBaseParameters(
     const size_t& state_dim, const size_t& measurement_dim,
-    const DistributionInterface& measurement_noise) {
+    const DistributionInterface<MeasurementType>& measurement_noise) {
   state_dim_ = state_dim;
   measurement_dim_ = measurement_dim;
   measurement_noise_.reset(measurement_noise.clone());
 }
 
-size_t MeasurementModelBase::getStateDim() const {
+template<typename MeasurementType>
+size_t MeasurementModelBase<MeasurementType>::getStateDim() const {
   return state_dim_;
 }
 
-size_t MeasurementModelBase::getMeasurementDim() const {
+template<typename MeasurementType>
+size_t MeasurementModelBase<MeasurementType>::getMeasurementDim() const {
   return measurement_dim_;
 }
 
-size_t MeasurementModelBase::getMeasurementNoiseDim() const {
+template<typename MeasurementType>
+size_t MeasurementModelBase<MeasurementType>::getMeasurementNoiseDim() const {
   CHECK(measurement_noise_) << "Measurement noise has not been set.";
   return measurement_noise_->mean().size();
 }
 
-DistributionInterface* MeasurementModelBase::getMeasurementNoise() const {
+template<typename MeasurementType>
+DistributionInterface<MeasurementType>*
+MeasurementModelBase<MeasurementType>::getMeasurementNoise() const {
   CHECK(measurement_noise_) << "Measurement noise has not been set.";
   return measurement_noise_.get();
 }

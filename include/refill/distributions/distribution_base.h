@@ -8,10 +8,12 @@
 namespace refill {
 
 // Interface class for distributions
+template<typename ObjectType>
 class DistributionInterface {
  public:
-  virtual Eigen::VectorXd mean() const = 0;
+  virtual ObjectType mean() const = 0;
   virtual Eigen::MatrixXd cov() const = 0;
+  virtual ObjectType drawSample() const = 0;
   virtual DistributionInterface* clone() const = 0;
 };
 
@@ -21,8 +23,8 @@ class DistributionInterface {
 //  For new distributions, inherit from this class like this:
 //  class NewDistribution : public DistributionBase<NewDistribution>
 
-template <typename DERIVED>
-class DistributionBase : public DistributionInterface {
+template<typename DERIVED, typename ObjectType>
+class DistributionBase : public DistributionInterface<ObjectType> {
   virtual DistributionInterface* clone() const {
     DERIVED casted_derived_obj;
     try {

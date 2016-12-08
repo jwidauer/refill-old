@@ -11,7 +11,8 @@ using std::size_t;
 
 namespace refill {
 
-class LinearizedMeasurementModel : public MeasurementModelBase {
+class LinearizedMeasurementModel :
+    public MeasurementModelBase<Eigen::VectorXd> {
  public:
   virtual Eigen::MatrixXd getMeasurementJacobian(
       const Eigen::VectorXd& state) const = 0;
@@ -20,9 +21,9 @@ class LinearizedMeasurementModel : public MeasurementModelBase {
 
  protected:
   LinearizedMeasurementModel() = delete;
-  LinearizedMeasurementModel(const size_t& state_dim,
-                             const size_t& measurement_dim,
-                             const DistributionInterface& measurement_noise);
+  LinearizedMeasurementModel(
+      const size_t& state_dim, const size_t& measurement_dim,
+      const DistributionInterface<Eigen::VectorXd>& measurement_noise);
 };
 
 }  // namespace refill

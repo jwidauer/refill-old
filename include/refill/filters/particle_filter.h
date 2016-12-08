@@ -18,51 +18,52 @@ using std::size_t;
 
 namespace refill {
 
-template<typename StateType>
-class ParticleFilter : public FilterBase {
+template<typename StateType, typename MeasurementType>
+class ParticleFilter : public FilterBase<MeasurementType> {
  public:
   using ParticleType = std::pair<StateType, double>;
 
   ParticleFilter();
   ParticleFilter(
       const size_t& n_particles,
-      const DistributionInterface& initial_state_dist,
+      const DistributionInterface<StateType>& initial_state_dist,
       const std::function<void(std::vector<ParticleType>*)>& resample_method);
   ParticleFilter(
       const size_t& n_particles,
-      const DistributionInterface& initial_state_dist,
+      const DistributionInterface<StateType>& initial_state_dist,
       const std::function<void(std::vector<ParticleType>*)>& resample_method,
-      std::unique_ptr<SystemModelBase> system_model,
-      std::unique_ptr<MeasurementModelBase> measurement_model);
+      std::unique_ptr<SystemModelBase<StateType>> system_model,
+      std::unique_ptr<MeasurementModelBase<MeasurementType>> measurement_model);
 
   void setFilterParameters(
       const size_t& n_particles,
-      const DistributionInterface& initial_state_dist,
+      const DistributionInterface<StateType>& initial_state_dist,
       const std::function<void(std::vector<ParticleType>*)>& resample_method);
   void setFilterParameters(
       const size_t& n_particles,
-      const DistributionInterface& initial_state_dist,
+      const DistributionInterface<StateType>& initial_state_dist,
       const std::function<void(std::vector<ParticleType>*)>& resample_method,
-      std::unique_ptr<SystemModelBase> system_model,
-      std::unique_ptr<MeasurementModelBase> measurement_model);
+      std::unique_ptr<SystemModelBase<StateType>> system_model,
+      std::unique_ptr<MeasurementModelBase<MeasurementType>> measurement_model);
 
   void predict() override;
-  void predict(const Eigen::VectorXd& input);
-  void predict(const SystemModelBase& system_model);
-  void predict(const SystemModelBase& system_model,
-               const Eigen::VectorXd& input);
+  void predict(const StateType& input);
+  void predict(const SystemModelBase<StateType>& system_model);
+  void predict(const SystemModelBase<StateType>& system_model,
+               const StateType& input);
 
-  void update(const Eigen::VectorXd& measurement) override;
-  void update(const MeasurementModelBase& measurement_model,
-              const Eigen::VectorXd& measurement);
+  void update(const MeasurementType& measurement) override;
+  void update(const MeasurementModelBase<MeasurementType>& measurement_model,
+              const MeasurementType& measurement);
 
  private:
-  void initializeParticles(const DistributionInterface& initial_state);
+  void initializeParticles(
+      const DistributionInterface<StateType>& initial_state);
   void resample();
 
   std::vector<ParticleType> particles_;
-  std::unique_ptr<SystemModelBase> system_model_;
-  std::unique_ptr<MeasurementModelBase> measurement_model_;
+  std::unique_ptr<SystemModelBase<StateType>> system_model_;
+  std::unique_ptr<MeasurementModelBase<MeasurementType>> measurement_model_;
   std::function<void(std::vector<ParticleType>*)> resample_method_;
 };
 

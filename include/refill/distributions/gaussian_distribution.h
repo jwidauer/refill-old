@@ -14,7 +14,8 @@ using std::size_t;
 
 namespace refill {
 
-class GaussianDistribution : public DistributionBase<GaussianDistribution> {
+class GaussianDistribution : public DistributionBase<GaussianDistribution,
+    Eigen::VectorXd> {
  public:
   GaussianDistribution();
   GaussianDistribution(const GaussianDistribution& dist) = default;

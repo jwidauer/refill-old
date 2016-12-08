@@ -12,7 +12,7 @@ using std::size_t;
 
 namespace refill {
 
-class LinearizedSystemModel : public SystemModelBase {
+class LinearizedSystemModel : public SystemModelBase<Eigen::VectorXd> {
  public:
   virtual Eigen::MatrixXd getStateJacobian(
       const Eigen::VectorXd& state, const Eigen::VectorXd& input) const = 0;
@@ -21,11 +21,13 @@ class LinearizedSystemModel : public SystemModelBase {
 
  protected:
   LinearizedSystemModel() = delete;
-  LinearizedSystemModel(const size_t& state_dim,
-                        const DistributionInterface& system_noise);
-  LinearizedSystemModel(const size_t& state_dim,
-                        const DistributionInterface& system_noise,
-                        const size_t& input_dim);
+  LinearizedSystemModel(
+      const size_t& state_dim,
+      const DistributionInterface<Eigen::VectorXd>& system_noise);
+  LinearizedSystemModel(
+      const size_t& state_dim,
+      const DistributionInterface<Eigen::VectorXd>& system_noise,
+      const size_t& input_dim);
 };
 
 }  // namespace refill

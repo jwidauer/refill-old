@@ -8,10 +8,11 @@
 
 namespace refill {
 
+template<typename MeasurementType>
 class FilterBase {
  public:
   virtual void predict() = 0;
-  virtual void update(const Eigen::VectorXd& measurement) = 0;
+  virtual void update(const MeasurementType& measurement) = 0;
 };
 
 }  // namespace refill
